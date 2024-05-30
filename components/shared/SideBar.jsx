@@ -11,14 +11,12 @@ const SideBar = () => {
           <Link
             href={link.href}
             key={link.name}
-            className="flex items-center gap-2 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg w-fit ">
+            className="flex items-center gap-2 hover:bg-[#3d3d4e] hover:text-white px-3 py-2 rounded-lg w-fit ">
             <div className="size-7">{link.icon}</div>
             <p className="capitalize">{link.name}</p>
           </Link>
         ))}
       </div>
-
-      
     </>
   );
 };
