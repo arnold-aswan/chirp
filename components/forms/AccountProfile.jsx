@@ -1,8 +1,12 @@
 "use client";
 
+import React, { useState } from "react";
+import Image from "next/image";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserValidation } from "@/lib/validations/user";
+
 import {
   Form,
   FormControl,
@@ -16,17 +20,24 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 
-import React, { useState } from "react";
-import Image from "next/image";
+import { isBase64Image } from "@/lib/utils";
+import { useUploadThing } from "@/lib/uploadthing";
+import { updateUser } from "@/lib/actions/user.actions";
+
+import { usePathname, useRouter } from "next/navigation";
 
 const AccountProfile = ({ user, btnTitle }) => {
+  // console.log(user);
   const [files, setFiles] = useState([]);
+  const { startUpload } = useUploadThing("media");
+  const pathname = usePathname();
+  const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
       profile_photo: user?.image || "",
-      name: user?.name || "",
+      fullname: user?.name || "",
       username: user?.username || "",
       email: user?.email || "",
       bio: user?.bio || "",
@@ -34,7 +45,33 @@ const AccountProfile = ({ user, btnTitle }) => {
   });
 
   const onSubmit = async (values) => {
+    const blob = values.profile_photo;
     // console.log(values);
+
+    const hasImageChanged = isBase64Image(blob);
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files);
+
+      if (imgRes && imgRes[0].fileUrl) {
+        values.profile_photo = imgRes[0].fileUrl;
+      }
+    }
+
+    await updateUser({
+      userId: user.id,
+      username: values.username,
+      fullname: values.fullname,
+      bio: values.bio,
+      image: values.profile_photo,
+      email: values.email,
+      path: pathname,
+    });
+
+    if (pathname === "/profile/edit") {
+      router.back();
+    } else {
+      router.push("/");
+    }
   };
 
   const handleImageUpload = (e, onChange) => {
@@ -116,7 +153,7 @@ const AccountProfile = ({ user, btnTitle }) => {
 
         <FormField
           control={form.control}
-          name="name"
+          name="fullname"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
