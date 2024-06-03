@@ -5,9 +5,10 @@ import Link from "next/link";
 
 const Header = () => {
   return (
-    <header className="flex justify-between items-center h-[60px]">
-      <Link href="/">
-        <Image src="/logo.png" alt="logo" width={100} height={50} />
+    <header className="bg-black flex justify-between items-center h-[60px] px-5 ">
+      <Link href="/" className="flex items-center gap-5">
+        <Image src="/cbox.jpg" alt="logo" width={78} height={50} />
+        <p className="text-white font-bold text-3xl">Chirp</p>
       </Link>
       <UserButton />
     </header>
