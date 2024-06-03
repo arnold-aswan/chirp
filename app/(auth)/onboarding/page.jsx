@@ -15,12 +15,14 @@ const page = async () => {
     image: user.imageUrl,
   };
   return (
-    <main className="mx-auto flex flex-col justify-start max-w-3xl">
-      <h1>Onboarding</h1>
-      <p>Complete your profile now to use Chirp</p>
+    <main className="mx-auto flex flex-col justify-start max-w-3xl text-white">
+      <h1 className="head-text">Onboarding</h1>
+      <p className="mt-3 text-white font-bold">
+        Complete your profile now to use Chirp
+      </p>
 
-      <section className="mt-9 p-10 bg-gray-100">
-        <AccountProfile user={userData} btnTitle="Continue" />
+      <section className="mt-9 p-10 bg-dark-brown rounded-xl">
+        <AccountProfile user={userData} />
       </section>
     </main>
   );

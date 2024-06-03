@@ -26,7 +26,7 @@ import { updateUser } from "@/lib/actions/user.actions";
 
 import { usePathname, useRouter } from "next/navigation";
 
-const AccountProfile = ({ user, btnTitle }) => {
+const AccountProfile = ({ user }) => {
   // console.log(user);
   const [files, setFiles] = useState([]);
   const { startUpload } = useUploadThing("media");
@@ -39,14 +39,13 @@ const AccountProfile = ({ user, btnTitle }) => {
       profile_photo: user?.image || "",
       fullname: user?.name || "",
       username: user?.username || "",
-      email: user?.email || "",
+      // email: user?.email || "",
       bio: user?.bio || "",
     },
   });
 
   const onSubmit = async (values) => {
     const blob = values.profile_photo;
-    // console.log(values);
 
     const hasImageChanged = isBase64Image(blob);
     if (hasImageChanged) {
@@ -63,7 +62,7 @@ const AccountProfile = ({ user, btnTitle }) => {
       fullname: values.fullname,
       bio: values.bio,
       image: values.profile_photo,
-      email: values.email,
+      email: user.email,
       path: pathname,
     });
 
@@ -134,30 +133,11 @@ const AccountProfile = ({ user, btnTitle }) => {
 
         <FormField
           control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl className="flex-1">
-                <Input
-                  type="email"
-                  placeholder="shadcn"
-                  {...field}
-                  className=""
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="fullname"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
+              <FormLabel>Full Name</FormLabel>
+              <FormControl className="text-black">
                 <Input type="text" placeholder="shadcn" {...field} />
               </FormControl>
               <FormMessage />
@@ -171,7 +151,7 @@ const AccountProfile = ({ user, btnTitle }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
-              <FormControl>
+              <FormControl className="text-black">
                 <Input type="text" placeholder="shadcn" {...field} />
               </FormControl>
               <FormMessage />
@@ -185,14 +165,16 @@ const AccountProfile = ({ user, btnTitle }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Bio</FormLabel>
-              <FormControl>
+              <FormControl className="text-black">
                 <Textarea placeholder="shadcn" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="bg-purple">
+          Continue
+        </Button>
       </form>
     </Form>
   );
