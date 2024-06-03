@@ -17,6 +17,23 @@ module.exports = {
       },
     },
     extend: {
+      colors: {
+        "dark-brown": "#3d3d4e",
+        "dark-blue": "#000814",
+        purple: "#9b5de5",
+        "dark-1": "#000000",
+        "dark-2": "#121417",
+        "dark-3": "#101012",
+        "dark-4": "#1F1F22",
+        "light-1": "#FFFFFF",
+        "light-2": "#EFEFEF",
+        "light-3": "#7878A3",
+        "light-4": "#5C5C7B",
+        "gray-1": "#697C89",
+      },
+      screens: {
+        xs: "400px",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
