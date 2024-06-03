@@ -5,6 +5,8 @@ import { dark } from "@clerk/themes";
 
 import Header from "@/components/shared/Header";
 import BottomBar from "@/components/shared/BottomBar";
+import SideBar from "@/components/shared/SideBar";
+import RightSidebar from "@/components/shared/RightSidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,12 +23,20 @@ export default function RootLayout({ children }) {
       }}>
       <html lang="en">
         <body
-          className={`${inter.className} bg-[#f3f3f4] max-w-screen-2xl container mx-auto p-2`}>
+          className={`${inter.className} bg-black max-w-screen-2xl mx-auto `}>
           <Header />
-          {children}
-          <footer className="flex items-center justify-between border w-full fixed bottom-0 right-0 left-0 lg:hidden">
-            <BottomBar />
-          </footer>
+
+          <main className="flex flex-row  ">
+            <SideBar />
+
+            <section className="flex-1">
+              <div className="bg-dark-blue h-full">{children}</div>
+            </section>
+
+            <RightSidebar />
+          </main>
+
+          <BottomBar />
         </body>
       </html>
     </ClerkProvider>
