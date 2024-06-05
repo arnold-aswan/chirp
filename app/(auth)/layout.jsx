@@ -12,10 +12,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: dark,
-      }}>
+    <ClerkProvider>
       <html lang="en">
         <body
           className={`${inter.className} flex items-center justify-center min-h-screen bg-black`}>

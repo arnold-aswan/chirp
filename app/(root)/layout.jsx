@@ -17,20 +17,19 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: dark,
-      }}>
+    <ClerkProvider>
       <html lang="en">
         <body
-          className={`${inter.className} bg-black max-w-screen-2xl mx-auto `}>
+          className={`${inter.className} bg-black max-w-[1440px] container mx-auto `}>
           <Header />
 
           <main className="flex flex-row  ">
             <SideBar />
 
             <section className="flex-1">
-              <div className="bg-dark-blue h-full">{children}</div>
+              <div className="bg-dark-blue container mx-auto pt-8 h-full">
+                {children}
+              </div>
             </section>
 
             <RightSidebar />
