@@ -27,7 +27,6 @@ import { updateUser } from "@/lib/actions/user.actions";
 import { usePathname, useRouter } from "next/navigation";
 
 const AccountProfile = ({ user }) => {
-  // console.log(user);
   const [files, setFiles] = useState([]);
   const { startUpload } = useUploadThing("media");
   const pathname = usePathname();
@@ -39,7 +38,6 @@ const AccountProfile = ({ user }) => {
       profile_photo: user?.image || "",
       fullname: user?.name || "",
       username: user?.username || "",
-      // email: user?.email || "",
       bio: user?.bio || "",
     },
   });
