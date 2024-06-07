@@ -5,7 +5,7 @@ import PostCard from "@/components/PostCard";
 export default async function Home() {
   const results = await fetchPosts(1, 20);
   const user = await currentUser();
-  // console.log(results);
+
   return (
     <main className="">
       <h1 className="head-text">Home </h1>
