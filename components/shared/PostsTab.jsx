@@ -1,6 +1,6 @@
 import { fetchUserPosts } from "@/lib/actions/user.actions";
 import { redirect } from "next/navigation";
-import PostCard from "@/components/PostCard";
+import PostCard from "@/components/cards/PostCard";
 
 const PostsTab = async ({ currentUserId, accountId, accountType }) => {
   let results = await fetchUserPosts(accountId);
