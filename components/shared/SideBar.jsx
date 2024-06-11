@@ -3,18 +3,22 @@ import React from "react";
 import { sidebarLiks } from "@/constants/data";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SignedIn, SignOutButton } from "@clerk/nextjs";
+import { SignedIn, SignOutButton, useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 
 const SideBar = () => {
   const pathname = usePathname();
+  const { userId } = useAuth();
 
   return (
     <section className="hidden sticky top-0 left-0 z-20 text-white md:flex md:flex-col pt-12 px-6 h-screen ">
       <div className="flex flex-col gap-8">
         {sidebarLiks.map((link) => {
           const isActive =
-            pathname.includes(link.href) && pathname === link.href;
+            (pathname.includes(link.href) && link.href.length > 1) ||
+            pathname === link.href;
+
+          if (link.href === "/profile") link.href = `${link.href}/${userId}`;
           return (
             <Link
               href={link.href}
