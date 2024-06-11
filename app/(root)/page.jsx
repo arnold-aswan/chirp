@@ -1,6 +1,6 @@
 import { fetchPosts } from "@/lib/actions/post.action";
 import { currentUser } from "@clerk/nextjs/server";
-import PostCard from "@/components/PostCard";
+import PostCard from "@/components/cards/PostCard";
 
 export default async function Home() {
   const results = await fetchPosts(1, 20);
