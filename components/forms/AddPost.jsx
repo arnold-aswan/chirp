@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,15 +14,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "../ui/button";
-
+import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 
 import { usePathname, useRouter } from "next/navigation";
-import { createPost } from "../../lib/actions/post.action";
+import { createPost } from "@/lib/actions/post.action";
+import { useUploadThing } from "@/lib/uploadthing";
 
 const AddPost = ({ userId }) => {
   const [files, setFiles] = useState([]);
+  const { startUpload } = useUploadThing("media");
   const pathName = usePathname();
   const router = useRouter();
 
@@ -31,25 +32,30 @@ const AddPost = ({ userId }) => {
     resolver: zodResolver(PostValidation),
     defaultValues: {
       post: "",
-      postMedia: "",
+      // media: [],
+      media: "",
       accountId: userId,
     },
   });
 
   const onSubmit = async (values) => {
-    // const imgRes = await startUpload(files);
+    // console.log(values);
+    const imgRes = await startUpload(files);
+    console.log("Image upload response:", imgRes);
 
-    // if (imgRes && imgRes[0].fileUrl) {
-    //   values.profile_photo = imgRes[0].fileUrl;
-    // }
+    const imageUrls = imgRes.map((file) => file.url).join(",");
+    console.log("Image URLs:", imageUrls);
+
     try {
-      await createPost({
+      const postData = {
         text: values.post,
         author: userId,
-        // image: values.images,
+        media: imageUrls,
         community: null,
         path: pathName,
-      });
+      };
+
+      await createPost(postData);
 
       router.push("/");
     } catch (error) {
@@ -57,36 +63,39 @@ const AddPost = ({ userId }) => {
     }
   };
 
-  // const handleImageUpload = (e, onChange) => {
-  //   e.preventDefault();
-  //   const fileReader = new FileReader();
+  const handleImageUpload = (e, onChange) => {
+    e.preventDefault();
+    const selectedFiles = Array.from(e.target.files);
 
-  //   if (e.target.files && e.target.files.length > 0) {
-  //     const selectedFiles = e.target.files;
-  //     setFiles(selectedFiles);
+    if (selectedFiles.length > 0) {
+      const imageUrls = [];
 
-  //     console.log(selectedFiles);
+      selectedFiles.forEach((file) => {
+        if (!file.type.includes("image")) return;
 
-  //     for (let file of selectedFiles) {
-  //       if (!file.type.includes("image")) return null;
-  //     }
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
+          const imageDataUrl = e.target?.result?.toString() || "";
+          imageUrls.push(imageDataUrl);
+          if (imageUrls.length === selectedFiles.length) {
+            onChange(imageUrls);
+          }
+        };
+        fileReader.readAsDataURL(file);
+      });
 
-  //     fileReader.onload = async (e) => {
-  //       const imageDataUrl = e.target?.result?.toString() || "";
-  //       onChange(imageDataUrl);
-  //     };
-  //     fileReader.readAsDataURL(selectedFiles[0]);
-  //   }
-  // };
+      setFiles(selectedFiles);
+    }
+  };
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col justify-start gap-6 mt-10">
-        {/* <FormField
+        <FormField
           control={form.control}
-          name="images"
+          name="media"
           render={({ field }) => (
             <FormItem className="flex items-center gap-4">
               <FormLabel>
@@ -107,7 +116,7 @@ const AddPost = ({ userId }) => {
               <FormMessage />
             </FormItem>
           )}
-        /> */}
+        />
 
         <FormField
           control={form.control}
@@ -122,7 +131,7 @@ const AddPost = ({ userId }) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="bg-purple ">
+        <Button type="submit" className="bg-purple w-fit ">
           Post
         </Button>
       </form>
